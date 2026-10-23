@@ -1,0 +1,16 @@
+# Build output (CubeIDE regenerates these when you build)
+Debug/
+Release/
+*.o
+*.d
+*.elf
+*.map
+*.list
+*.su
+*.bin
+*.hex
+
+# Local IDE / workspace settings
+.metadata/
+.settings/
+*.launch
