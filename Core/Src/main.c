@@ -89,11 +89,6 @@ static void MX_TIM2_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-/*uint32_t echo_start;
-uint32_t echo_end;
-uint32_t echo_width;
-uint32_t t0; */
-
 uint32_t distance_cm;
 
 ParkState state = STATE_SAFE;
@@ -142,38 +137,6 @@ uint32_t measure_distance(void)
 	return dist;
 
 }
-
-	/* HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
-
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
-
-			delay_us(TRIG_PULSE_US);
-
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
-
-			echo_width = 0;
-					t0 = __HAL_TIM_GET_COUNTER(&htim2);
-					while (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2) == GPIO_PIN_RESET) {
-						if ( __HAL_TIM_GET_COUNTER(&htim2) - t0 > ECHO_START_TIMEOUT_US) {
-							break;
-						}
-					}
-					if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2) == GPIO_PIN_SET) {
-						echo_start = __HAL_TIM_GET_COUNTER(&htim2);
-						t0 = __HAL_TIM_GET_COUNTER(&htim2);
-
-						while (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2) == GPIO_PIN_SET) {
-							if (__HAL_TIM_GET_COUNTER(&htim2) - t0 > ECHO_END_TIMEOUT_US) {
-								break;
-							}
-						}
-						if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2) == GPIO_PIN_RESET) {
-							echo_end = __HAL_TIM_GET_COUNTER(&htim2);
-							echo_width = echo_end - echo_start;
-						}
-					}
-					return echo_width / ECHO_US_PER_CM;  */
-
 
 
 	ParkState distance_to_state(uint32_t dist_cm){
@@ -332,19 +295,11 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
-	// uint32_t counter1, counter2;
+
 	HAL_TIM_Base_Start(&htim2);
 
 	HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_3);
 
-	//  counter1 =  __HAL_TIM_GET_COUNTER(&htim2);
-
-	//  HAL_Delay(100);
-
-	// counter2 =  __HAL_TIM_GET_COUNTER(&htim2);
-
-	// uint32_t diff = counter2 - counter1;
-	//setvbuf(stdout, NULL, _IONBF, 0);
 	printf("Parking sensor started\r\n");
   /* USER CODE END 2 */
 
@@ -356,94 +311,12 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-		/* HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET); //Green high
-
-		 delay_us(10);
-
-		 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);//green low
-
-		 delay_us(10);  */
-
-		/*    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET); //Orange high
-
-		 HAL_Delay(500);
-
-		 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET); //Orange low
-
-		 HAL_Delay(500);
-
-		 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET); //Red high
-
-		 HAL_Delay(500);
-
-		 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET); //Red low
-
-		 HAL_Delay(500);
-
-		 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET); //Blue high
-
-		 HAL_Delay(500);
-
-		 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_RESET); //Blue low
-
-		 HAL_Delay(500);  */
-
-
-
-		/*  while (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2) == GPIO_PIN_RESET)
-		 {
-
-		 }
-
-		 echo_start = __HAL_TIM_GET_COUNTER(&htim2);
-		 while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2) == GPIO_PIN_SET)
-		 {
-
-		 }
-		 echo_end = __HAL_TIM_GET_COUNTER(&htim2);
-
-		 echo_width = echo_end - echo_start;
-
-		 distance_cm = (echo_width)/58;  */
-
-
 
 		distance_cm = measure_distance();
 		new_state = distance_to_state(distance_cm);
 		state = filter_state(new_state);
 		update_leds(state);
 		print_status(state, distance_cm);
-
-		/*f(distance_cm == 0)
-		 {
-		 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
-		 }
-		 else if(distance_cm < 10)
-		 {
-		 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_15, GPIO_PIN_SET);
-
-		 }
-		 else if(distance_cm < 20)
-		 {
-		 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
-		 }
-		 else if(distance_cm <30)
-		 {
-		 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
-
-		 }
-		 else
-		 {
-		 HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
-
-		 }  */
-
-
-
-
-
-
-	//rintf("alive\r\n");
 
 
 		HAL_Delay(LOOP_DELAY_MS);  //delay_us(60000);
