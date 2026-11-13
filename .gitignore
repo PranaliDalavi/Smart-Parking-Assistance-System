@@ -14,3 +14,10 @@ Release/
 .metadata/
 .settings/
 *.launch
+
+# CubeMX backup copies
+Backup/
+*.bak
+
+# Personal files
+*.xlsx
